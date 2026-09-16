@@ -7,11 +7,6 @@
 
 set -e
 
-# 如果通过管道运行 (curl | bash)，将标准输入重定向至当前终端控制台
-if [ ! -t 0 ]; then
-  exec < /dev/tty 2>/dev/null || true
-fi
-
 # 1. 确定运行环境与项目根目录
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" 2>/dev/null && pwd || echo "")"
 CACHE_DIR="$HOME/.typeless-export"
@@ -93,11 +88,11 @@ echo ""
 printf "\033[?25l" # 隐藏光标
 print_menu "first"
 
-# 键盘监听循环
+# 键盘监听循环 (通过 /dev/tty 读取用户按键，绝不能重定向 bash 的 stdin)
 while true; do
-  IFS= read -r -s -n 1 key
+  IFS= read -r -s -n 1 key < /dev/tty
   if [[ $key == $'\x1b' ]]; then
-    read -r -s -n 2 rest
+    read -r -s -n 2 rest < /dev/tty
     case "$rest" in
       "[A"|"k") # 上方向键或 k
         ((selected--))
@@ -146,9 +141,9 @@ case $selected in
     "$JS_RUNNER" "$CLI_PATH" sync
     ;;
   3)
-    read -r -p "请输入要导入的词表文件路径: " input_file
+    read -r -p "请输入要导入的词表文件路径: " input_file < /dev/tty
     if [ -f "$input_file" ]; then
-      read -r -p "请输入预设分类名称 [默认: 自定义词库]: " input_preset
+      read -r -p "请输入预设分类名称 [默认: 自定义词库]: " input_preset < /dev/tty
       input_preset="${input_preset:-自定义词库}"
       "$JS_RUNNER" "$CLI_PATH" import "$input_file" --preset "$input_preset"
     else
