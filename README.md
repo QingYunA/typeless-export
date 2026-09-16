@@ -6,6 +6,10 @@
   <a href="package.json"><img src="https://img.shields.io/badge/version-1.0.0-orange.svg" alt="Version"></a>
 </p>
 
+<p align="center">
+  <b>简体中文</b> | <a href="README.en.md">English</a>
+</p>
+
 导出 Typeless 本地个人词库，支持迁移到各类语音输入工具（首发支持一键导入 OpenLess）。
 
 ---
@@ -34,20 +38,20 @@ Typeless 最近把免费额度从每周 8000 字降到了 2000 字。很多用�
 
 ### 方式一：一行命令直接运行（推荐，带交互菜单）
 
-在终端粘贴以下命令即可运行（免翻墙、国内 CDN 加速）：
+在终端粘贴以下命令即可运行（免科学上网、走 CDN 极速直连）：
 
 ```bash
-bash -c "$(curl -fsSL https://fastly.jsdelivr.net/gh/QingYunA/typeless-export@main/run.sh)"
+bash -c "$(curl -fsSL https://cdn.jsdelivr.net/gh/QingYunA/typeless-export@main/run.sh)"
 ```
 
-或者：
+或者通过 GitHub 原生地址：
 
 ```bash
-curl -fsSL https://fastly.jsdelivr.net/gh/QingYunA/typeless-export@main/run.sh | bash
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/QingYunA/typeless-export/main/run.sh)"
 ```
 
-- **键盘上下键交互**：支持用 `↑` / `↓` 移动光标选择，按回车确认。
-- **免安装 Node.js**：如果系统没有安装 Node，会自动使用 Typeless 内置的运行环境，小白直接用。
+- **键盘上下键交互**：支持用 `↑` / `↓`（或 `k` / `j`）移动光标选择，按回车确认。
+- **免安装 Node.js**：如果系统没有安装 Node，会自动使用 Typeless 内置的运行环境，开箱即用。
 
 ---
 

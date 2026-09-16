@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 
 # ==============================================================================
-# Typeless Export (tle) - 词库导出与迁移助手
-# 支持通过 curl -fsSL ... | bash 直接运行，并支持键盘上下键交互选择
+# Typeless Export (tle) - Vocabulary Export & Migration Tool
+# Supports curl -fsSL ... | bash with interactive arrow-key navigation
 # ==============================================================================
 
 set -e
+export TLE_LANG=en
 
-# 1. 确定运行环境与项目根目录
+# 1. Determine execution directory and project root
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" 2>/dev/null && pwd || echo "")"
 CACHE_DIR="$HOME/.typeless-export"
 
@@ -16,50 +17,49 @@ if [ -f "$SCRIPT_DIR/bin/cli.mjs" ]; then
 else
   PROJECT_ROOT="$CACHE_DIR"
   if [ ! -f "$PROJECT_ROOT/bin/cli.mjs" ]; then
-    echo "正在下载最新代码..."
+    echo "Downloading latest release..."
     mkdir -p "$PROJECT_ROOT"
     if ! curl -sSL --connect-timeout 5 "https://github.com/QingYunA/typeless-export/archive/refs/heads/main.tar.gz" | tar -xz -C "$PROJECT_ROOT" --strip-components=1 2>/dev/null; then
-      echo "直连较慢，正在使用加速节点下载..."
+      echo "Direct download slow, trying mirror..."
       curl -sSL --connect-timeout 10 "https://ghproxy.net/https://github.com/QingYunA/typeless-export/archive/refs/heads/main.tar.gz" | tar -xz -C "$PROJECT_ROOT" --strip-components=1
     fi
   fi
 fi
 
-# 2. 检测 JavaScript 运行时
-# 优先使用系统 node；若未安装 node，则自动使用 Typeless.app 内置的运行环境
+# 2. Detect JavaScript runtime
 if command -v node >/dev/null 2>&1; then
   JS_RUNNER="node"
 elif [ -x "/Applications/Typeless.app/Contents/MacOS/Typeless" ]; then
   export ELECTRON_RUN_AS_NODE=1
   JS_RUNNER="/Applications/Typeless.app/Contents/MacOS/Typeless"
 else
-  echo "错误: 未检测到 Node.js 或 Typeless 运行时。"
-  echo "请先安装 Node.js (https://nodejs.org) 或确认安装了 Typeless 客户端。"
+  echo "Error: Neither Node.js nor Typeless runtime detected."
+  echo "Please install Node.js (https://nodejs.org) or install the Typeless app."
   exit 1
 fi
 
 CLI_PATH="$PROJECT_ROOT/bin/cli.mjs"
 
-# 如果传递了子命令参数 (如 ./run.sh export)，直接静默执行，不打开菜单
+# If subcommands passed (e.g. ./run.en.sh export), run directly
 if [ -n "$1" ]; then
   exec "$JS_RUNNER" "$CLI_PATH" "$@"
 fi
 
-# 3. 终端交互菜单设计
+# 3. Interactive terminal menu
 options=(
-  "导出 Typeless 词库 (保存为 txt, csv, json)"
-  "一键迁移到 OpenLess (导出并写入 OpenLess 词典)"
-  "同步 240+ 程序员与 AI 热词到 OpenLess"
-  "导入自定义词表文件到 OpenLess"
-  "安装 tle 命令到终端 (支持以后直接运行 tle)"
-  "退出"
+  "Export Typeless vocabulary (save as txt, csv, json)"
+  "Migrate to OpenLess (export & write to OpenLess dictionary)"
+  "Sync 240+ programmer & AI hotwords to OpenLess"
+  "Import custom wordlist file to OpenLess"
+  "Install \`tle\` command to terminal PATH"
+  "Exit"
 )
 
 selected=0
 
-# 退出时恢复终端光标
+# Restore cursor on exit
 cleanup() {
-  printf "\033[?25h" # 显示光标
+  printf "\033[?25h"
   echo ""
 }
 trap cleanup EXIT INT TERM
@@ -78,7 +78,7 @@ print_menu() {
   done
 }
 
-# 终端菜单输入设备检测
+# Input device detection
 if [ -n "$TLE_INPUT_DEV" ]; then
   INPUT_DEV="$TLE_INPUT_DEV"
 elif [ -r /dev/tty ]; then
@@ -95,28 +95,28 @@ fi
 
 echo ""
 echo "=============================================="
-echo "  Typeless Export - 词库导出与迁移助手"
+echo "  Typeless Export - Vocabulary Migration Tool"
 echo "=============================================="
-echo "请使用 ↑ / ↓ 键选择操作，按 Enter 回车确认："
+echo "Use ↑ / ↓ keys to navigate, press Enter to confirm:"
 echo ""
 
-# 临时关闭 set -e 以免交互循环中的按键判断或非零返回中断脚本
+# Temporarily disable set -e for interactive loop
 set +e
 
-printf "\033[?25l" # 隐藏光标
+printf "\033[?25l" # Hide cursor
 print_menu "first"
 
-# 键盘监听循环 (通过 INPUT_DEV 读取用户按键，绝不能重定向 bash 的 stdin)
+# Keyboard listening loop
 while true; do
   IFS= read -r -s -n 1 key < "$INPUT_DEV" || true
   if [[ $key == $'\x1b' ]]; then
     read $ESC_TIMEOUT -r -s -n 2 rest < "$INPUT_DEV" || rest=""
     case "$rest" in
-      "[A"|"OA") # 上方向键
+      "[A"|"OA") # Up arrow
         selected=$(( (selected - 1 + ${#options[@]}) % ${#options[@]} ))
         print_menu "redraw"
         ;;
-      "[B"|"OB") # 下方向键
+      "[B"|"OB") # Down arrow
         selected=$(( (selected + 1) % ${#options[@]} ))
         print_menu "redraw"
         ;;
@@ -139,18 +139,18 @@ while true; do
     selected=4; print_menu "redraw"; break
   elif [[ $key == "6" || $key == "q" || $key == "Q" ]]; then
     selected=5; print_menu "redraw"; break
-  elif [[ -z "$key" ]]; then # 回车键
+  elif [[ -z "$key" ]]; then # Enter
     break
   fi
 done
 
-# 恢复 set -e 模式
+# Re-enable set -e
 set -e
 
-printf "\033[?25h" # 恢复光标
+printf "\033[?25h" # Restore cursor
 echo ""
 
-# 4. 执行选中的指令
+# 4. Execute selected command
 case $selected in
   0)
     "$JS_RUNNER" "$CLI_PATH" export
@@ -162,18 +162,17 @@ case $selected in
     "$JS_RUNNER" "$CLI_PATH" sync
     ;;
   3)
-    read -r -p "请输入要导入的词表文件路径: " input_file < "$INPUT_DEV"
+    read -r -p "Enter vocabulary file path: " input_file < "$INPUT_DEV"
     if [ -f "$input_file" ]; then
-      read -r -p "请输入预设分类名称 [默认: 自定义词库]: " input_preset < "$INPUT_DEV"
-      input_preset="${input_preset:-自定义词库}"
+      read -r -p "Enter preset category name [default: Custom Vocabulary]: " input_preset < "$INPUT_DEV"
+      input_preset="${input_preset:-Custom Vocabulary}"
       "$JS_RUNNER" "$CLI_PATH" import "$input_file" --preset "$input_preset"
     else
-      echo "错误: 找不到文件 $input_file"
+      echo "Error: File not found: $input_file"
       exit 1
     fi
     ;;
   4)
-    # 安装到用户 PATH
     INSTALL_BIN_DIR="/usr/local/bin"
     if [ ! -w "$INSTALL_BIN_DIR" ]; then
       INSTALL_BIN_DIR="$HOME/.local/bin"
@@ -183,15 +182,16 @@ case $selected in
     WRAPPER="$INSTALL_BIN_DIR/tle"
     cat << WRAPPER_EOF > "$WRAPPER"
 #!/usr/bin/env bash
-exec bash "$PROJECT_ROOT/run.sh" "\$@"
+export TLE_LANG=en
+exec bash "$PROJECT_ROOT/run.en.sh" "\$@"
 WRAPPER_EOF
     chmod +x "$WRAPPER"
 
-    echo "✓ 已成功将 tle 安装至 $WRAPPER"
-    echo "现在你可以在任意终端窗口直接输入 tle 打开本菜单！"
+    echo "✓ Successfully installed tle to $WRAPPER"
+    echo "You can now type \`tle\` in any terminal to open this menu!"
     ;;
   5)
-    echo "已退出。"
+    echo "Exited."
     exit 0
     ;;
 esac
