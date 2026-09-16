@@ -36,7 +36,7 @@ This tool automatically reads and decrypts your local Typeless credentials, expo
 
 - **Automatic Credential Discovery**: Decrypts local caches offline — no need to type email, password, or API keys.
 - **Multiple Export Formats**: Clean single-word-per-line text (TXT), detailed spreadsheets (CSV with categories and timestamps), and raw structured JSON.
-- **One-Click OpenLess Migration**: Automatically writes to OpenLess dictionaries with atomic backups and smart deduplication.
+- **Non-Intrusive Openless Presets**: Imports words as an independent Expansion Pack (Preset) in Openless without polluting your personal active hotword list. You choose whether to enable it in settings.
 - **Bundled Technical Hotwords**: Includes 240+ high-frequency programming and AI developer terms ready to import.
 - **Zero External Dependencies**: Implemented purely with Node.js built-ins.
 - **Works Without Node**: Automatically falls back to Typeless's embedded runtime if Node.js is not installed on your system.
@@ -62,8 +62,8 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/QingYunA/typeless-export
 - **Interactive Arrow Keys**: Use `↑` / `↓` (or `k` / `j`) to navigate, press `Enter` to confirm.
 - **Three Core Features**:
   1. `Export Typeless vocabulary`: Enter output folder (defaults to `~` home directory), generating txt, csv, and json.
-  2. `Export and migrate to Openless`: Export and safely write directly to Openless dictionary.
-  3. `Sync programmer terms and AI hotwords to Openless`: Quickly sync curated developer terms to Openless.
+  2. `Export and migrate to Openless`: Creates an independent Openless expansion pack; enabling it is up to you.
+  3. `Sync programmer terms and AI hotwords to Openless`: Adds curated developer hotwords to Openless as a toggleable pack.
 - **No Node.js Required**: Uses Typeless's built-in runtime if Node is not found on your system.
 
 ---

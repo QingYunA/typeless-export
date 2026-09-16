@@ -136,17 +136,17 @@ async function handleImport() {
     if (isEn) {
       const action = res.presetAction === '新建' ? 'Created' : 'Updated';
       console.log(`Import completed:`);
-      console.log(`- Hotwords (dictionary.json): added ${res.addedToDict}, total ${res.totalDict}`);
-      console.log(`- Preset (vocab-presets.json): ${action} "${res.presetName}" (${res.presetWordsCount} terms)`);
-      console.log(`\nNote: Please restart OpenLess for new vocabulary to take effect.`);
+      console.log(`- OpenLess Expansion Pack (vocab-presets.json): ${action} "${res.presetName}" (${res.presetWordsCount} terms)`);
+      console.log(`- Your personal dictionary is untouched. You can toggle this pack on/off in OpenLess settings.`);
+      console.log(`\nNote: Please restart OpenLess to see the new expansion pack.`);
     } else {
       console.log(`导入完成:`);
-      console.log(`- 热词库 (dictionary.json): 新增 ${res.addedToDict} 词，现有 ${res.totalDict} 词`);
-      console.log(`- 场景预设 (vocab-presets.json): 已${res.presetAction}「${res.presetName}」(${res.presetWordsCount} 词)`);
-      console.log(`\n提示: 请退出并重新打开 OpenLess 使词库生效。`);
+      console.log(`- OpenLess 拓展集 (vocab-presets.json): 已${res.presetAction}「${res.presetName}」(${res.presetWordsCount} 词)`);
+      console.log(`- 个人活跃词库保持独立未受影响，你可以在 OpenLess 偏好设置中自由勾选是否启用。`);
+      console.log(`\n提示: 请退出并重新打开 OpenLess 查看新增拓展集。`);
     }
   } catch (err) {
-    console.error(isEn ? `Import failed: ${err.message}` : `导出失败: ${err.message}`);
+    console.error(isEn ? `Import failed: ${err.message}` : `导入失败: ${err.message}`);
     process.exit(1);
   }
 }
@@ -156,23 +156,23 @@ async function handleSync() {
     const programmerWords = loadVocabFile('programmer.txt');
     console.log(isEn ? `Loaded ${programmerWords.length} technical hotwords` : `已载入 ${programmerWords.length} 个技术词汇`);
 
-    const presetName = isEn ? 'Programmer Terms' : '程序员常用词';
+    const presetName = isEn ? 'Programmer Terms & AI Hotwords' : '程序员常用词语与 AI 热词';
     const res = importToOpenLess(programmerWords, {
       presetName,
-      presetId: 'programmer_extended',
+      presetId: 'programmer_ai_terms',
     });
 
     if (isEn) {
       const action = res.presetAction === '新建' ? 'Created' : 'Updated';
       console.log(`Sync completed:`);
-      console.log(`- Hotwords: added ${res.addedToDict}, total ${res.totalDict}`);
-      console.log(`- Preset: ${action} "${res.presetName}" (${res.presetWordsCount} terms)`);
-      console.log(`\nNote: Please restart OpenLess for new vocabulary to take effect.`);
+      console.log(`- OpenLess Expansion Pack (vocab-presets.json): ${action} "${res.presetName}" (${res.presetWordsCount} terms)`);
+      console.log(`- Your personal dictionary is untouched. You can toggle this pack on/off in OpenLess settings.`);
+      console.log(`\nNote: Please restart OpenLess to see the new expansion pack.`);
     } else {
       console.log(`同步完成:`);
-      console.log(`- 热词库: 新增 ${res.addedToDict} 词，现有 ${res.totalDict} 词`);
-      console.log(`- 场景预设: 已${res.presetAction}「${res.presetName}」(${res.presetWordsCount} 词)`);
-      console.log(`\n提示: 请退出并重新打开 OpenLess 使词库生效。`);
+      console.log(`- OpenLess 拓展集 (vocab-presets.json): 已${res.presetAction}「${res.presetName}」(${res.presetWordsCount} 词)`);
+      console.log(`- 个人活跃词库保持独立未受影响，你可以在 OpenLess 偏好设置中自由勾选是否启用。`);
+      console.log(`\n提示: 请退出并重新打开 OpenLess 查看新增拓展集。`);
     }
   } catch (err) {
     console.error(isEn ? `Sync failed: ${err.message}` : `同步失败: ${err.message}`);
@@ -195,27 +195,24 @@ async function handleMigrate() {
     process.exit(1);
   }
 
-  const programmerWords = loadVocabFile('programmer.txt');
-  const allWords = dedupeWords([...typelessWords, ...programmerWords]);
-
   try {
-    const presetName = isEn ? 'All Hotwords (Typeless + Tech)' : '全部热词(Typeless+技术词)';
-    const res = importToOpenLess(allWords, {
+    const presetName = isEn ? 'Typeless Migrated Vocabulary' : 'Typeless 迁移词库';
+    const res = importToOpenLess(typelessWords, {
       presetName,
-      presetId: 'migrated_full_vocab',
+      presetId: 'typeless_migrated',
     });
 
     if (isEn) {
       const action = res.presetAction === '新建' ? 'Created' : 'Updated';
       console.log(`Migration completed:`);
-      console.log(`- Hotwords: added ${res.addedToDict}, total ${res.totalDict}`);
-      console.log(`- Preset: ${action} "${res.presetName}" (${res.presetWordsCount} terms)`);
-      console.log(`\nNote: Please restart OpenLess for new vocabulary to take effect.`);
+      console.log(`- OpenLess Expansion Pack (vocab-presets.json): ${action} "${res.presetName}" (${res.presetWordsCount} terms)`);
+      console.log(`- Your personal dictionary is untouched. You can toggle this pack on/off in OpenLess settings.`);
+      console.log(`\nNote: Please restart OpenLess to see the new expansion pack.`);
     } else {
       console.log(`迁移完成:`);
-      console.log(`- 热词库: 新增 ${res.addedToDict} 词，现有 ${res.totalDict} 词`);
-      console.log(`- 场景预设: 已${res.presetAction}「${res.presetName}」(${res.presetWordsCount} 词)`);
-      console.log(`\n提示: 请退出并重新打开 OpenLess 使词库生效。`);
+      console.log(`- OpenLess 拓展集 (vocab-presets.json): 已${res.presetAction}「${res.presetName}」(${res.presetWordsCount} 词)`);
+      console.log(`- 个人活跃词库保持独立未受影响，你可以在 OpenLess 偏好设置中自由勾选是否启用。`);
+      console.log(`\n提示: 请退出并重新打开 OpenLess 查看新增拓展集。`);
     }
   } catch (err) {
     console.error(isEn ? `Write to OpenLess failed: ${err.message}` : `写入 OpenLess 失败: ${err.message}`);

@@ -24,11 +24,12 @@ function backupFile(filePath) {
 }
 
 /**
- * 将词汇列表安全导入到本地 OpenLess 的 dictionary.json 和 vocab-presets.json
+ * 将词汇列表作为拓展集（Preset）安全导入到本地 OpenLess 的 vocab-presets.json
+ * 绝不直接污染用户的个人活跃词库 (dictionary.json)，是否启用完全交由用户在设置中勾选
  */
 export function importToOpenLess(words, options = {}) {
   const {
-    presetName = 'Typeless迁移词库',
+    presetName = 'Typeless 迁移词库',
     presetId = 'typeless_migrated',
     dryRun = false,
   } = options;
@@ -38,57 +39,19 @@ export function importToOpenLess(words, options = {}) {
     throw new Error(`未找到 OpenLess 数据目录 (${appDir})，请先下载并运行一次 OpenLess。`);
   }
 
-  const dictPath = path.join(appDir, 'dictionary.json');
   const presetPath = path.join(appDir, 'vocab-presets.json');
 
-  // 1. 读取并更新 dictionary.json (活跃词典)
-  let dictList = [];
-  if (fs.existsSync(dictPath)) {
-    try {
-      dictList = JSON.parse(fs.readFileSync(dictPath, 'utf8'));
-    } catch {
-      dictList = [];
-    }
-  }
-
-  const existingMap = new Map();
-  for (const item of dictList) {
-    if (item && item.phrase) {
-      existingMap.set(item.phrase.trim().toLowerCase(), item);
-    }
-  }
-
-  const nowIso = new Date().toISOString();
-  let addedToDict = 0;
   const validWords = [];
-
+  const seen = new Set();
   for (const raw of words) {
     const word = typeof raw === 'string' ? raw.trim() : (raw.term || raw.phrase || '').trim();
-    if (!word) continue;
-    validWords.push(word);
-
-    const key = word.toLowerCase();
-    if (!existingMap.has(key)) {
-      const newEntry = {
-        id: crypto.randomUUID(),
-        phrase: word,
-        note: null,
-        enabled: true,
-        hits: 0,
-        createdAt: nowIso,
-      };
-      dictList.push(newEntry);
-      existingMap.set(key, newEntry);
-      addedToDict++;
-    } else {
-      const existing = existingMap.get(key);
-      if (!existing.enabled) {
-        existing.enabled = true;
-      }
+    if (word && !seen.has(word.toLowerCase())) {
+      seen.add(word.toLowerCase());
+      validWords.push(word);
     }
   }
 
-  // 2. 读取并更新 vocab-presets.json (场景预设面板)
+  // 1. 读取并更新 vocab-presets.json (拓展集面板)
   let presetStore = { custom: [], overrides: [], disabledBuiltinPresetIds: [] };
   if (fs.existsSync(presetPath)) {
     try {
@@ -104,6 +67,7 @@ export function importToOpenLess(words, options = {}) {
   );
 
   let presetAction = '更新';
+  let addedCount = 0;
   if (!targetPreset) {
     targetPreset = {
       id: presetId,
@@ -112,32 +76,30 @@ export function importToOpenLess(words, options = {}) {
     };
     presetStore.custom.push(targetPreset);
     presetAction = '新建';
+    addedCount = validWords.length;
   } else {
-    const existingPhrases = new Set(targetPreset.phrases || []);
+    const existingPhrases = new Set((targetPreset.phrases || []).map(p => p.toLowerCase()));
     for (const w of validWords) {
-      if (!existingPhrases.has(w)) {
+      if (!existingPhrases.has(w.toLowerCase())) {
         targetPreset.phrases.push(w);
+        existingPhrases.add(w.toLowerCase());
+        addedCount++;
       }
     }
   }
 
-  // 3. 写入磁盘（非 dryRun 模式）
+  // 2. 写入磁盘（非 dryRun 模式）
   if (!dryRun) {
-    backupFile(dictPath);
     backupFile(presetPath);
-
-    fs.writeFileSync(dictPath, JSON.stringify(dictList, null, 2), 'utf8');
     fs.writeFileSync(presetPath, JSON.stringify(presetStore, null, 2), 'utf8');
   }
 
   return {
     dryRun,
-    addedToDict,
-    totalDict: dictList.length,
+    addedCount,
     presetWordsCount: targetPreset.phrases.length,
     presetName,
     presetAction,
-    dictPath,
     presetPath,
   };
 }
