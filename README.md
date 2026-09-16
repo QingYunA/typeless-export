@@ -50,6 +50,10 @@ bash -c "$(curl -fsSL https://cdn.jsdelivr.net/gh/QingYunA/typeless-export@main/
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/QingYunA/typeless-export/main/run.sh)"
 ```
 
+- **三大核心功能**：
+  1. `导出 Typeless 词库`：输入保存目录（默认直接保存至 `~` 家目录），生成 txt、csv、json。
+  2. `导出并迁移到 Openless`：一键导出并安全写入 Openless 词典。
+  3. `同步程序员常用词语、AI 热词到 Openless`：快速将常用编程与 AI 词汇导入 Openless。
 - **键盘上下键交互**：支持用 `↑` / `↓`（或 `k` / `j`）移动光标选择，按回车确认。
 - **免安装 Node.js**：如果系统没有安装 Node，会自动使用 Typeless 内置的运行环境，开箱即用。
 
@@ -58,17 +62,15 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/QingYunA/typeless-export
 ### 方式二：使用 npx 或命令行参数运行
 
 ```bash
-# 1. 导出 Typeless 词库（在当前目录生成 txt、csv、json）
+# 1. 导出 Typeless 词库（默认保存至 ~ 家目录，也可指定目录如 ~/Downloads）
 npx typeless-export export
+npx typeless-export export ~/Downloads
 
-# 2. 一键迁移到 OpenLess（导出 Typeless 并直接写入 OpenLess）
+# 2. 导出并一键迁移到 Openless
 npx typeless-export migrate
 
-# 3. 将内置的 240+ 程序员技术词汇导入 OpenLess
+# 3. 将内置的 240+ 程序员常用词语与 AI 热词导入 Openless
 npx typeless-export sync
-
-# 4. 导入指定的词表文件到 OpenLess
-npx typeless-export import ./my_words.txt --preset "自定义词库"
 ```
 
 ### 方式三：克隆本地运行

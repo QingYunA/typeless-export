@@ -47,11 +47,9 @@ fi
 
 # 3. Interactive terminal menu
 options=(
-  "Export Typeless vocabulary (save as txt, csv, json)"
-  "Migrate to OpenLess (export & write to OpenLess dictionary)"
-  "Sync 240+ programmer & AI hotwords to OpenLess"
-  "Import custom wordlist file to OpenLess"
-  "Install \`tle\` command to terminal PATH"
+  "Export Typeless vocabulary"
+  "Export and migrate to Openless"
+  "Sync programmer terms and AI hotwords to Openless"
   "Exit"
 )
 
@@ -133,12 +131,8 @@ while true; do
     selected=1; print_menu "redraw"; break
   elif [[ $key == "3" ]]; then
     selected=2; print_menu "redraw"; break
-  elif [[ $key == "4" ]]; then
+  elif [[ $key == "4" || $key == "q" || $key == "Q" ]]; then
     selected=3; print_menu "redraw"; break
-  elif [[ $key == "5" ]]; then
-    selected=4; print_menu "redraw"; break
-  elif [[ $key == "6" || $key == "q" || $key == "Q" ]]; then
-    selected=5; print_menu "redraw"; break
   elif [[ -z "$key" ]]; then # Enter
     break
   fi
@@ -153,7 +147,10 @@ echo ""
 # 4. Execute selected command
 case $selected in
   0)
-    "$JS_RUNNER" "$CLI_PATH" export
+    read -r -p "Enter export directory [default: ~]: " export_dir < "$INPUT_DEV"
+    export_dir="${export_dir:-$HOME}"
+    export_dir="${export_dir/#\~/$HOME}"
+    "$JS_RUNNER" "$CLI_PATH" export "$export_dir"
     ;;
   1)
     "$JS_RUNNER" "$CLI_PATH" migrate
@@ -162,35 +159,6 @@ case $selected in
     "$JS_RUNNER" "$CLI_PATH" sync
     ;;
   3)
-    read -r -p "Enter vocabulary file path: " input_file < "$INPUT_DEV"
-    if [ -f "$input_file" ]; then
-      read -r -p "Enter preset category name [default: Custom Vocabulary]: " input_preset < "$INPUT_DEV"
-      input_preset="${input_preset:-Custom Vocabulary}"
-      "$JS_RUNNER" "$CLI_PATH" import "$input_file" --preset "$input_preset"
-    else
-      echo "Error: File not found: $input_file"
-      exit 1
-    fi
-    ;;
-  4)
-    INSTALL_BIN_DIR="/usr/local/bin"
-    if [ ! -w "$INSTALL_BIN_DIR" ]; then
-      INSTALL_BIN_DIR="$HOME/.local/bin"
-      mkdir -p "$INSTALL_BIN_DIR"
-    fi
-
-    WRAPPER="$INSTALL_BIN_DIR/tle"
-    cat << WRAPPER_EOF > "$WRAPPER"
-#!/usr/bin/env bash
-export TLE_LANG=en
-exec bash "$PROJECT_ROOT/run.en.sh" "\$@"
-WRAPPER_EOF
-    chmod +x "$WRAPPER"
-
-    echo "✓ Successfully installed tle to $WRAPPER"
-    echo "You can now type \`tle\` in any terminal to open this menu!"
-    ;;
-  5)
     echo "Exited."
     exit 0
     ;;

@@ -2,6 +2,7 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import os from 'node:os';
 import {
   exportTypelessToFile,
   decryptTypelessAuth,
@@ -31,7 +32,7 @@ Usage:
   npx typeless-export <command>
 
 Commands:
-  export             Export local Typeless vocabulary (txt, csv, json)
+  export [dir]       Export local Typeless vocabulary (default: ~)
   migrate            Export from Typeless and import directly into OpenLess
   sync               Sync bundled 240+ programmer & AI hotwords to OpenLess
   import <file>      Import custom wordlist file to OpenLess
@@ -43,9 +44,9 @@ Options:
 
 Examples:
   npx typeless-export export
+  npx typeless-export export ~/Downloads
   npx typeless-export migrate
   npx typeless-export sync
-  npx typeless-export import ./my_words.txt --preset "Frequent"
 `);
   } else {
     console.log(`
@@ -56,7 +57,7 @@ Typeless Export (tle) - 词库导出与迁移工具
   npx typeless-export <command>
 
 命令:
-  export             导出本地 Typeless 词库 (txt, csv, json)
+  export [dir]       导出本地 Typeless 词库 (默认保存至 ~)
   migrate            一键从 Typeless 导出并导入 OpenLess (后续支持更多语音工具)
   sync               将自带的 240+ 程序员与 AI 词汇导入 OpenLess
   import <file>      导入自定义词表到 OpenLess
@@ -68,17 +69,23 @@ Typeless Export (tle) - 词库导出与迁移工具
 
 示例:
   npx typeless-export export
+  npx typeless-export export ~/Downloads
   npx typeless-export migrate
   npx typeless-export sync
-  npx typeless-export import ./my_words.txt --preset "常用词"
 `);
   }
 }
 
 async function handleExport() {
+  const customDir = args[1];
+  const homeDir = process.env.HOME || process.env.USERPROFILE || os.homedir();
+  const targetDir = customDir
+    ? path.resolve(process.cwd(), customDir.replace(/^~(?=$|\/)/, homeDir))
+    : homeDir;
+
   console.log(isEn ? 'Reading local Typeless credentials...' : '正在读取本地 Typeless 登录凭据...');
   try {
-    const result = await exportTypelessToFile(process.cwd());
+    const result = await exportTypelessToFile(targetDir);
     if (isEn) {
       console.log(`Found credentials: ${result.email}`);
       console.log(`Exported ${result.words.length} terms:`);

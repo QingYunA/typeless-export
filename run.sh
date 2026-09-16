@@ -47,11 +47,9 @@ fi
 
 # 3. 终端交互菜单设计
 options=(
-  "导出 Typeless 词库 (保存为 txt, csv, json)"
-  "一键迁移到 OpenLess (导出并写入 OpenLess 词典)"
-  "同步 240+ 程序员与 AI 热词到 OpenLess"
-  "导入自定义词表文件到 OpenLess"
-  "安装 tle 命令到终端 (支持以后直接运行 tle)"
+  "导出 Typeless 词库"
+  "导出并迁移到 Openless"
+  "同步程序员常用词语、AI 热词到 Openless"
   "退出"
 )
 
@@ -133,12 +131,8 @@ while true; do
     selected=1; print_menu "redraw"; break
   elif [[ $key == "3" ]]; then
     selected=2; print_menu "redraw"; break
-  elif [[ $key == "4" ]]; then
+  elif [[ $key == "4" || $key == "q" || $key == "Q" ]]; then
     selected=3; print_menu "redraw"; break
-  elif [[ $key == "5" ]]; then
-    selected=4; print_menu "redraw"; break
-  elif [[ $key == "6" || $key == "q" || $key == "Q" ]]; then
-    selected=5; print_menu "redraw"; break
   elif [[ -z "$key" ]]; then # 回车键
     break
   fi
@@ -153,7 +147,10 @@ echo ""
 # 4. 执行选中的指令
 case $selected in
   0)
-    "$JS_RUNNER" "$CLI_PATH" export
+    read -r -p "请输入导出目录 [默认: ~]: " export_dir < "$INPUT_DEV"
+    export_dir="${export_dir:-$HOME}"
+    export_dir="${export_dir/#\~/$HOME}"
+    "$JS_RUNNER" "$CLI_PATH" export "$export_dir"
     ;;
   1)
     "$JS_RUNNER" "$CLI_PATH" migrate
@@ -162,35 +159,6 @@ case $selected in
     "$JS_RUNNER" "$CLI_PATH" sync
     ;;
   3)
-    read -r -p "请输入要导入的词表文件路径: " input_file < "$INPUT_DEV"
-    if [ -f "$input_file" ]; then
-      read -r -p "请输入预设分类名称 [默认: 自定义词库]: " input_preset < "$INPUT_DEV"
-      input_preset="${input_preset:-自定义词库}"
-      "$JS_RUNNER" "$CLI_PATH" import "$input_file" --preset "$input_preset"
-    else
-      echo "错误: 找不到文件 $input_file"
-      exit 1
-    fi
-    ;;
-  4)
-    # 安装到用户 PATH
-    INSTALL_BIN_DIR="/usr/local/bin"
-    if [ ! -w "$INSTALL_BIN_DIR" ]; then
-      INSTALL_BIN_DIR="$HOME/.local/bin"
-      mkdir -p "$INSTALL_BIN_DIR"
-    fi
-
-    WRAPPER="$INSTALL_BIN_DIR/tle"
-    cat << WRAPPER_EOF > "$WRAPPER"
-#!/usr/bin/env bash
-exec bash "$PROJECT_ROOT/run.sh" "\$@"
-WRAPPER_EOF
-    chmod +x "$WRAPPER"
-
-    echo "✓ 已成功将 tle 安装至 $WRAPPER"
-    echo "现在你可以在任意终端窗口直接输入 tle 打开本菜单！"
-    ;;
-  5)
     echo "已退出。"
     exit 0
     ;;

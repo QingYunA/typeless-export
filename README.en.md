@@ -52,6 +52,10 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/QingYunA/typeless-export
 ```
 
 - **Interactive Arrow Keys**: Use `↑` / `↓` (or `k` / `j`) to navigate, press `Enter` to confirm.
+- **Three Core Features**:
+  1. `Export Typeless vocabulary`: Enter output folder (defaults to `~` home directory), generating txt, csv, and json.
+  2. `Export and migrate to Openless`: Export and safely write directly to Openless dictionary.
+  3. `Sync programmer terms and AI hotwords to Openless`: Quickly sync curated developer terms to Openless.
 - **No Node.js Required**: Uses Typeless's built-in runtime if Node is not found on your system.
 
 ---
@@ -59,17 +63,15 @@ bash -c "$(curl -fsSL https://raw.githubusercontent.com/QingYunA/typeless-export
 ### Method 2: Command Line (CLI / npx)
 
 ```bash
-# 1. Export Typeless vocabulary (generates txt, csv, json in current folder)
+# 1. Export Typeless vocabulary (defaults to ~ home directory, or pass a custom directory)
 npx typeless-export export --en
+npx typeless-export export ~/Downloads --en
 
-# 2. Migrate directly to OpenLess
+# 2. Export and migrate directly to Openless
 npx typeless-export migrate --en
 
-# 3. Sync bundled 240+ programmer & AI hotwords to OpenLess
+# 3. Sync bundled 240+ programmer & AI hotwords to Openless
 npx typeless-export sync --en
-
-# 4. Import custom vocabulary file to OpenLess
-npx typeless-export import ./my_words.txt --preset "Custom" --en
 ```
 
 ---
