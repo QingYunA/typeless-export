@@ -23,7 +23,10 @@ else
   if [ ! -f "$PROJECT_ROOT/bin/cli.mjs" ]; then
     echo "正在下载最新代码..."
     mkdir -p "$PROJECT_ROOT"
-    curl -sSL https://github.com/QingYunA/typeless-export/archive/refs/heads/main.tar.gz | tar -xz -C "$PROJECT_ROOT" --strip-components=1
+    if ! curl -sSL --connect-timeout 5 "https://github.com/QingYunA/typeless-export/archive/refs/heads/main.tar.gz" | tar -xz -C "$PROJECT_ROOT" --strip-components=1 2>/dev/null; then
+      echo "直连较慢，正在使用加速节点下载..."
+      curl -sSL --connect-timeout 10 "https://ghproxy.net/https://github.com/QingYunA/typeless-export/archive/refs/heads/main.tar.gz" | tar -xz -C "$PROJECT_ROOT" --strip-components=1
+    fi
   fi
 fi
 

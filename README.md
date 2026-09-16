@@ -34,9 +34,13 @@ Typeless 最近把免费额度从每周 8000 字降到了 2000 字。很多用�
 
 ### 方式一：一行命令直接运行（推荐，带交互菜单）
 
-在 Mac 或 Linux 终端粘贴以下命令：
+在 Mac 或 Linux 终端粘贴以下任一命令即可：
 
 ```bash
+# 国内直连加速（推荐，免翻墙）
+curl -fsSL https://fastly.jsdelivr.net/gh/QingYunA/typeless-export@main/run.sh | bash
+
+# GitHub 官方源
 curl -fsSL https://raw.githubusercontent.com/QingYunA/typeless-export/main/run.sh | bash
 ```
 
