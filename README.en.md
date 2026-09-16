@@ -10,6 +10,14 @@
   <a href="README.md">简体中文</a> | <b>English</b>
 </p>
 
+```text
+  _____                 __                ______                     __ 
+ /_  __/_ _____  ___   / /__ ___ ___     / ____/_ __ ___  ___  ____ / /_
+  / / / // / _ \/ -_) / / -_|_-<(_-<    / __/  \ \ // _ \/ _ \/ __// __/
+ /_/  \_, / .__/\__/ /_/\__/___/___/   /_____//_\_\/ .__/\___/_/   \__/ 
+     /___/_/                                      /_/                   
+```
+
 Export your local personal vocabulary from Typeless and easily migrate to any voice dictation or input tool (featuring one-click import into OpenLess).
 
 ---

@@ -92,10 +92,15 @@ else
 fi
 
 echo ""
-echo "=============================================="
-echo "  Typeless Export - Vocabulary Migration Tool"
-echo "=============================================="
-echo "Use ↑ / ↓ keys to navigate, press Enter to confirm:"
+printf "\033[1;36m  _____                 __                ______                     __ \033[0m\n"
+printf "\033[1;36m /_  __/_ _____  ___   / /__ ___ ___     / ____/_ __ ___  ___  ____ / /_\033[0m\n"
+printf "\033[1;36m  / / / // / _ \\/ -_) / / -_|_-<(_-<    / __/  \\ \\ // _ \\/ _ \\/ __// __/\033[0m\n"
+printf "\033[1;36m /_/  \\_, / .__/\\__/ /_/\\__/___/___/   /_____//_\\_\\/ .__/\\___/_/   \\__/ \033[0m\n"
+printf "\033[1;36m     /___/_/                                      /_/                   \033[0m\n"
+echo ""
+echo "    Typeless Export (tle) · Vocabulary Export & Migration Tool"
+echo " ───────────────────────────────────────────────────────────────────"
+echo " Use ↑ / ↓ keys to navigate, press Enter to confirm:"
 echo ""
 
 # Temporarily disable set -e for interactive loop
