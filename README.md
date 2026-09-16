@@ -33,7 +33,20 @@ Typeless 免费额度从每周 8000 字降到了 2000 字。想换到开源免�
 
 ## 使用方法
 
-### 方式一：使用 npx 直接运行
+### 方式一：一行命令直接运行（推荐，带交互菜单）
+
+在 Mac 或 Linux 终端粘贴以下命令：
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/QingYunA/typeless-to-openless/main/run.sh | bash
+```
+
+- **键盘上下键交互**：支持用 `↑` / `↓` 移动光标选择，按回车确认。
+- **免安装 Node.js**：如果系统没有安装 Node，会自动使用 Typeless 内置的运行环境，开箱即用。
+
+---
+
+### 方式二：使用 npx 或命令行参数运行
 
 ```bash
 # 1. 一键迁移：导出 Typeless 词库并直接导入 OpenLess
