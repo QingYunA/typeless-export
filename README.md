@@ -131,3 +131,6 @@ cd typeless-export
 ## License
 
 [MIT](LICENSE) © 2026 Serein
+
+## 谢谢你
+https://linux.do/
