@@ -1,6 +1,6 @@
 {
   "name": "typeless-export",
-  "version": "1.0.0",
+  "version": "1.0.6",
   "description": "一键导出 Typeless 个人专有词库，支持迁移与导入到各种语音助手及输入法工具。",
   "type": "module",
   "bin": {

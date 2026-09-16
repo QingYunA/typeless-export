@@ -1,24 +1,22 @@
-# typeless-export
+<p align="center">
+  <img src="assets/logo.svg" alt="Typeless Export Logo" width="80" height="80" />
+</p>
+
+<h1 align="center">Typeless Export</h1>
+
+<p align="center">
+  <b>Export local Typeless vocabulary and migrate to OpenLess and other voice dictation tools</b>
+</p>
 
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"></a>
   <a href="package.json"><img src="https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen.svg" alt="Node Version"></a>
-  <a href="package.json"><img src="https://img.shields.io/badge/version-1.0.0-orange.svg" alt="Version"></a>
+  <a href="package.json"><img src="https://img.shields.io/badge/version-1.0.6-orange.svg" alt="Version"></a>
 </p>
 
 <p align="center">
   <a href="README.md">简体中文</a> | <b>English</b>
 </p>
-
-```text
-  _____                 __                ______                     __ 
- /_  __/_ _____  ___   / /__ ___ ___     / ____/_ __ ___  ___  ____ / /_
-  / / / // / _ \/ -_) / / -_|_-<(_-<    / __/  \ \ // _ \/ _ \/ __// __/
- /_/  \_, / .__/\__/ /_/\__/___/___/   /_____//_\_\/ .__/\___/_/   \__/ 
-     /___/_/                                      /_/                   
-```
-
-Export your local personal vocabulary from Typeless and easily migrate to any voice dictation or input tool (featuring one-click import into OpenLess).
 
 ---
 
