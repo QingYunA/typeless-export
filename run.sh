@@ -7,6 +7,8 @@
 
 set -e
 
+VERSION="1.0.5"
+
 # 1. 确定运行环境与项目根目录
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" 2>/dev/null && pwd || echo "")"
 CACHE_DIR="$HOME/.typeless-export"
@@ -15,13 +17,17 @@ if [ -f "$SCRIPT_DIR/bin/cli.mjs" ]; then
   PROJECT_ROOT="$SCRIPT_DIR"
 else
   PROJECT_ROOT="$CACHE_DIR"
-  if [ ! -f "$PROJECT_ROOT/bin/cli.mjs" ]; then
-    echo "正在下载最新代码..."
+  INSTALLED_VER=""
+  [ -f "$PROJECT_ROOT/.version" ] && INSTALLED_VER="$(cat "$PROJECT_ROOT/.version" 2>/dev/null || true)"
+
+  if [ "$INSTALLED_VER" != "$VERSION" ] || [ ! -f "$PROJECT_ROOT/bin/cli.mjs" ]; then
+    echo "正在更新核心组件 ($VERSION)..."
     mkdir -p "$PROJECT_ROOT"
     if ! curl -sSL --connect-timeout 5 "https://github.com/QingYunA/typeless-export/archive/refs/heads/main.tar.gz" | tar -xz -C "$PROJECT_ROOT" --strip-components=1 2>/dev/null; then
       echo "直连较慢，正在使用加速节点下载..."
       curl -sSL --connect-timeout 10 "https://ghproxy.net/https://github.com/QingYunA/typeless-export/archive/refs/heads/main.tar.gz" | tar -xz -C "$PROJECT_ROOT" --strip-components=1
     fi
+    echo "$VERSION" > "$PROJECT_ROOT/.version"
   fi
 fi
 

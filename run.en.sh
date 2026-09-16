@@ -8,6 +8,8 @@
 set -e
 export TLE_LANG=en
 
+VERSION="1.0.5"
+
 # 1. Determine execution directory and project root
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" 2>/dev/null && pwd || echo "")"
 CACHE_DIR="$HOME/.typeless-export"
@@ -16,13 +18,17 @@ if [ -f "$SCRIPT_DIR/bin/cli.mjs" ]; then
   PROJECT_ROOT="$SCRIPT_DIR"
 else
   PROJECT_ROOT="$CACHE_DIR"
-  if [ ! -f "$PROJECT_ROOT/bin/cli.mjs" ]; then
-    echo "Downloading latest release..."
+  INSTALLED_VER=""
+  [ -f "$PROJECT_ROOT/.version" ] && INSTALLED_VER="$(cat "$PROJECT_ROOT/.version" 2>/dev/null || true)"
+
+  if [ "$INSTALLED_VER" != "$VERSION" ] || [ ! -f "$PROJECT_ROOT/bin/cli.mjs" ]; then
+    echo "Updating core components ($VERSION)..."
     mkdir -p "$PROJECT_ROOT"
     if ! curl -sSL --connect-timeout 5 "https://github.com/QingYunA/typeless-export/archive/refs/heads/main.tar.gz" | tar -xz -C "$PROJECT_ROOT" --strip-components=1 2>/dev/null; then
       echo "Direct download slow, trying mirror..."
       curl -sSL --connect-timeout 10 "https://ghproxy.net/https://github.com/QingYunA/typeless-export/archive/refs/heads/main.tar.gz" | tar -xz -C "$PROJECT_ROOT" --strip-components=1
     fi
+    echo "$VERSION" > "$PROJECT_ROOT/.version"
   fi
 fi
 
