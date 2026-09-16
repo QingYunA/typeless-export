@@ -1,0 +1,265 @@
+# ==========================================
+# OpenLess 程序员 & 现代技术热词预设
+# 涵盖：Git/研发协同、主流语言/框架、数据库/云原生、大模型与 AI 编程工具
+# ==========================================
+
+# 研发与协同
+PR
+CI
+CD
+CI/CD
+MR
+CR
+tag
+release
+issue
+commit
+push
+pull
+fetch
+branch
+merge
+rebase
+squash
+cherry-pick
+stash
+conflict
+repo
+fork
+rollback
+revert
+diff
+patch
+hotfix
+milestone
+changelog
+webhook
+pipeline
+GitHub Actions
+LGTM
+WIP
+PoC
+MVP
+RFC
+ADR
+TODO
+FIXME
+bug
+debug
+refactor
+async/await
+staging
+prod
+deploy
+build
+TDD
+Unit Test
+E2E
+
+# AI 编程工具与 Agent
+Cursor
+Windsurf
+Claude Code
+Copilot
+GitHub Copilot
+Trae
+Cline
+Roo Code
+Aider
+Bolt.new
+Lovable
+v0
+Devin
+Replit
+Continue
+Codeium
+Supermaven
+Tabnine
+Zed
+VS Code
+Composer
+Cascade
+Vibe Coding
+
+# 大模型、底层推理与协议
+Claude
+Claude 3.5 Sonnet
+Claude 3.7 Sonnet
+ChatGPT
+OpenAI
+GPT
+GPT-4o
+o1
+o3
+o3-mini
+Codex
+Gemini
+Gemini 2.0
+Gemini 1.5 Pro
+DeepSeek
+DeepSeek-V3
+DeepSeek-R1
+Qwen
+Qwen 2.5
+Kimi
+GLM
+GLM-4
+MiniMax
+Mistral
+Llama
+Llama 3
+Grok
+Perplexity
+OpenRouter
+SiliconFlow
+Ollama
+vLLM
+SGLang
+Hugging Face
+MCP
+Model Context Protocol
+RAG
+Agent
+Subagent
+Multi-Agent
+Prompt
+System Prompt
+Context Window
+Token
+Embedding
+Fine-tuning
+LoRA
+Quantization
+CoT
+Function Calling
+Tool Use
+Benchmark
+Eval
+
+# 前端与跨端
+TypeScript
+JavaScript
+React
+Next.js
+Vue
+Nuxt
+Svelte
+SvelteKit
+Astro
+Vite
+Turbopack
+Webpack
+Bun
+pnpm
+yarn
+npm
+Deno
+Node.js
+Tailwind
+Tailwind CSS
+shadcn/ui
+Radix UI
+Lucide
+Framer Motion
+GSAP
+Zustand
+Redux
+TanStack
+React Query
+SWR
+Zod
+tRPC
+Axios
+JSX
+TSX
+WASM
+
+# 后端语言与框架
+Rust
+Python
+Go
+Golang
+Java
+C++
+C#
+Kotlin
+Swift
+PHP
+SQL
+Spring Boot
+FastAPI
+Django
+Flask
+Express
+NestJS
+Gin
+Axum
+Tokio
+
+# 数据库与存储
+PostgreSQL
+Postgres
+MySQL
+SQLite
+Redis
+MongoDB
+ClickHouse
+Supabase
+Neon
+Turso
+Prisma
+Drizzle
+
+# 运维、云原生与网络
+Docker
+Dockerfile
+Docker Compose
+Kubernetes
+K8s
+Helm
+Nginx
+Caddy
+Linux
+Ubuntu
+AWS
+Azure
+GCP
+Cloudflare
+Vercel
+Railway
+Fly.io
+API
+SDK
+CLI
+GUI
+REST
+RESTful
+GraphQL
+WebSocket
+SSE
+gRPC
+Protobuf
+OAuth
+JWT
+SSO
+Clerk
+CORS
+CSRF
+XSS
+payload
+endpoint
+middleware
+localhost
+env
+
+# 测试与代码规范
+Jest
+Vitest
+Playwright
+Cypress
+Pytest
+Mock
+ESLint
+Prettier
+Biome
+Ruff

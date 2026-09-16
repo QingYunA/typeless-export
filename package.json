@@ -1,0 +1,33 @@
+{
+  "name": "typeless-to-openless",
+  "version": "1.0.0",
+  "description": "一键导出 Typeless 个人专有词库，无缝迁移并扩充 OpenLess 热词词典。",
+  "type": "module",
+  "bin": {
+    "typeless-to-openless": "./bin/cli.mjs",
+    "t2o": "./bin/cli.mjs"
+  },
+  "main": "./src/index.mjs",
+  "scripts": {
+    "export": "node ./bin/cli.mjs export",
+    "import": "node ./bin/cli.mjs import",
+    "sync": "node ./bin/cli.mjs sync",
+    "migrate": "node ./bin/cli.mjs migrate"
+  },
+  "keywords": [
+    "typeless",
+    "openless",
+    "whisper",
+    "voice-typing",
+    "dictation",
+    "vocabulary",
+    "hotwords",
+    "asr",
+    "stt"
+  ],
+  "author": "Serein",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
