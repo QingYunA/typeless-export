@@ -1,11 +1,11 @@
 {
-  "name": "typeless-to-openless",
+  "name": "typeless-export",
   "version": "1.0.0",
-  "description": "一键导出 Typeless 个人专有词库，无缝迁移并扩充 OpenLess 热词词典。",
+  "description": "一键导出 Typeless 个人专有词库，支持迁移与导入到各种语音助手及输入法工具。",
   "type": "module",
   "bin": {
-    "typeless-to-openless": "./bin/cli.mjs",
-    "t2o": "./bin/cli.mjs"
+    "typeless-export": "./bin/cli.mjs",
+    "tle": "./bin/cli.mjs"
   },
   "main": "./src/index.mjs",
   "scripts": {
@@ -16,6 +16,7 @@
   },
   "keywords": [
     "typeless",
+    "typeless-export",
     "openless",
     "whisper",
     "voice-typing",

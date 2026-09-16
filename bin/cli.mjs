@@ -21,24 +21,24 @@ const command = args[0] || 'help';
 
 function showHelp() {
   console.log(`
-Typeless to OpenLess (t2o) - 词库导出与迁移工具
+Typeless Export (tle) - 词库导出与迁移工具
 
 用法:
-  t2o <command> [options]
-  npx typeless-to-openless <command>
+  tle <command> [options]
+  npx typeless-export <command>
 
 命令:
   export             导出本地 Typeless 词库 (txt, csv, json)
-  import <file>      导入自定义词表到 OpenLess
+  migrate            一键从 Typeless 导出并导入 OpenLess (后续支持更多语音工具)
   sync               将自带的 240+ 程序员与 AI 词汇导入 OpenLess
-  migrate            一键从 Typeless 导出并导入 OpenLess
+  import <file>      导入自定义词表到 OpenLess
   help, -h           查看帮助
 
 示例:
-  npx typeless-to-openless export
-  npx typeless-to-openless migrate
-  npx typeless-to-openless sync
-  npx typeless-to-openless import ./my_words.txt --preset "常用词"
+  npx typeless-export export
+  npx typeless-export migrate
+  npx typeless-export sync
+  npx typeless-export import ./my_words.txt --preset "常用词"
 `);
 }
 

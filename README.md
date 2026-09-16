@@ -1,4 +1,4 @@
-# typeless-to-openless
+# typeless-export
 
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"></a>
@@ -6,28 +6,27 @@
   <a href="package.json"><img src="https://img.shields.io/badge/version-1.0.0-orange.svg" alt="Version"></a>
 </p>
 
-导出 Typeless 本地词库，或直接导入到 OpenLess。自带 240+ 程序员与 AI 常用热词。
+导出 Typeless 本地个人词库，支持迁移到各类语音输入工具（首发支持一键导入 OpenLess）。
 
 ---
 
 ## 为什么做这个？
 
-Typeless 免费额度从每周 8000 字降到了 2000 字。想换到开源免费的 OpenLess，但遇到了两个问题：
+Typeless 最近把免费额度从每周 8000 字降到了 2000 字。很多用户想迁移到其他语音工具（如 OpenLess、Wispr Flow、Superwhisper 或输入法自定义短语），但遇到了痛点：
 
-1. **Typeless 没有导出按钮**：平时积累的人名、项目代码、专业缩写都在里面，手动复制太慢。
-2. **OpenLess 初始词库太少**：刚装上容易把 `PR` 识别成“批日”、把 `CI/CD` 识别成“吸哎吸低”、把 `v0` 识别成“微零”。
+- **Typeless 官方没有导出功能**：长期积累的人名、公司缩写、专有名词全被锁在软件里，手动复制非常费劲。
 
-这个工具可以读取本地 Typeless 缓存并导出全部词库，也可以把导出的词库和整理好的程序员热词直接写进 OpenLess。
+这个工具可以直接读取本地 Typeless 缓存并导出全部词库（TXT、CSV、JSON），并提供了一键导入 OpenLess 的功能。后续将持续扩展支持更多语音助手的格式转换与自动导入。
 
 ---
 
 ## 功能
 
 - **自动读取凭据**：直接读取本地缓存并解密，不需要手动输入账号密码。
-- **导出多种格式**：支持导出纯文本（每行一词）、CSV 表格（带分类与时间）和 JSON。
-- **安全导入 OpenLess**：写入前自动备份为 `.bak`，自动去重，不影响已有词条。
-- **自带 240+ 技术词汇**：整理了 Git 常用操作、前后端技术、主流大模型与 AI 编程工具名字。
-- **零额外依赖**：纯 Node.js 内置模块实现，下载即可运行。
+- **导出多种格式**：支持导出纯文本（每行一词）、CSV 表格（带分类与时间）和 JSON 格式。
+- **一键导入 OpenLess**：支持直接将导出的词库安全写入 OpenLess，自动备份、智能去重。
+- **自带 240+ 技术词汇**：内置一份整理好的高频程序员与 AI 技术词库，可直接导入。
+- **零额外依赖**：纯 Node.js 内置模块实现，开箱即用。
 
 ---
 
@@ -38,64 +37,67 @@ Typeless 免费额度从每周 8000 字降到了 2000 字。想换到开源免�
 在 Mac 或 Linux 终端粘贴以下命令：
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/QingYunA/typeless-to-openless/main/run.sh | bash
+curl -fsSL https://raw.githubusercontent.com/QingYunA/typeless-export/main/run.sh | bash
 ```
 
 - **键盘上下键交互**：支持用 `↑` / `↓` 移动光标选择，按回车确认。
-- **免安装 Node.js**：如果系统没有安装 Node，会自动使用 Typeless 内置的运行环境，开箱即用。
+- **免安装 Node.js**：如果系统没有安装 Node，会自动使用 Typeless 内置的运行环境，小白直接用。
 
 ---
 
 ### 方式二：使用 npx 或命令行参数运行
 
 ```bash
-# 1. 一键迁移：导出 Typeless 词库并直接导入 OpenLess
-npx typeless-to-openless migrate
+# 1. 导出 Typeless 词库（在当前目录生成 txt、csv、json）
+npx typeless-export export
 
-# 2. 只导出 Typeless 词库（在当前目录生成 txt、csv、json）
-npx typeless-to-openless export
+# 2. 一键迁移到 OpenLess（导出 Typeless 并直接写入 OpenLess）
+npx typeless-export migrate
 
-# 3. 将自带的 240+ 技术词汇导入 OpenLess
-npx typeless-to-openless sync
+# 3. 将内置的 240+ 程序员技术词汇导入 OpenLess
+npx typeless-export sync
 
 # 4. 导入指定的词表文件到 OpenLess
-npx typeless-to-openless import ./my_words.txt --preset "自定义词库"
+npx typeless-export import ./my_words.txt --preset "自定义词库"
 ```
 
-### 方式二：克隆本地运行
+### 方式三：克隆本地运行
 
 ```bash
-git clone https://github.com/QingYunA/typeless-to-openless.git
-cd typeless-to-openless
+git clone https://github.com/QingYunA/typeless-export.git
+cd typeless-export
 
 # 查看帮助
 ./bin/cli.mjs help
 
-# 执行迁移
-./bin/cli.mjs migrate
+# 执行导出
+./bin/cli.mjs export
 ```
-
-> **注意**：导入完成后，请退出 OpenLess（`Cmd + Q`）并重新打开，新词条才会生效。
 
 ---
 
-## 词库文件
+## 导出格式示例
 
-词库放在 `vocabularies/` 目录下：
+导出的文件包含：
+1. **`typeless_words.txt`**：每行一个词，方便直接复制粘贴或导入任何输入法。
+2. **`typeless_words.csv`**：包含词条、分类（人名/术语/产品）、语言、是否自动学习、创建时间。
+3. **`typeless_words.json`**：完整原始数据结构。
+
+---
+
+## 内置词库
+
+仓库在 `vocabularies/` 目录下维护了高质量的预设词库：
 
 | 文件 | 词数 | 说明 |
 | :--- | :--- | :--- |
-| [`vocabularies/programmer.txt`](./vocabularies/programmer.txt) | 240+ | 常见技术术语、主流大模型与 AI 编程工具热词 |
+| [`vocabularies/programmer.txt`](./vocabularies/programmer.txt) | 240+ | 涵盖 Git 研发、前端、后端、数据库、主流大模型与 AI 编程工具 |
 
-### 添加新词
-
-1. 打开 `vocabularies/programmer.txt`，新起一行写上词语（支持 `#` 注释）。
-2. 运行 `node ./bin/cli.mjs sync` 同步到 OpenLess。
-3. 欢迎提 Pull Request 补充常见技术词。
+欢迎提交 PR 补充各行各业的常用专业词库！
 
 ---
 
-## 数据路径
+## 数据路径说明
 
 - **Typeless 本地数据**:
   - macOS: `~/Library/Application Support/Typeless/user-data.json`

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # ==============================================================================
-# Typeless to OpenLess (t2o) - 交互式词库迁移助手
+# Typeless Export (tle) - 词库导出与迁移助手
 # 支持通过 curl -fsSL ... | bash 直接运行，并支持键盘上下键交互选择
 # ==============================================================================
 
@@ -14,7 +14,7 @@ fi
 
 # 1. 确定运行环境与项目根目录
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" 2>/dev/null && pwd || echo "")"
-CACHE_DIR="$HOME/.typeless-to-openless"
+CACHE_DIR="$HOME/.typeless-export"
 
 if [ -f "$SCRIPT_DIR/bin/cli.mjs" ]; then
   PROJECT_ROOT="$SCRIPT_DIR"
@@ -23,12 +23,12 @@ else
   if [ ! -f "$PROJECT_ROOT/bin/cli.mjs" ]; then
     echo "正在下载最新代码..."
     mkdir -p "$PROJECT_ROOT"
-    curl -sSL https://github.com/QingYunA/typeless-to-openless/archive/refs/heads/main.tar.gz | tar -xz -C "$PROJECT_ROOT" --strip-components=1
+    curl -sSL https://github.com/QingYunA/typeless-export/archive/refs/heads/main.tar.gz | tar -xz -C "$PROJECT_ROOT" --strip-components=1
   fi
 fi
 
 # 2. 检测 JavaScript 运行时
-# 优先使用系统 node；若未安装 node，则自动使用 Typeless.app 内置的 node 环境
+# 优先使用系统 node；若未安装 node，则自动使用 Typeless.app 内置的运行环境
 if command -v node >/dev/null 2>&1; then
   JS_RUNNER="node"
 elif [ -x "/Applications/Typeless.app/Contents/MacOS/Typeless" ]; then
@@ -36,7 +36,7 @@ elif [ -x "/Applications/Typeless.app/Contents/MacOS/Typeless" ]; then
   JS_RUNNER="/Applications/Typeless.app/Contents/MacOS/Typeless"
 else
   echo "错误: 未检测到 Node.js 或 Typeless 运行时。"
-  echo "请先安装 Node.js (https://nodejs.org) 或安装 Typeless 客户端。"
+  echo "请先安装 Node.js (https://nodejs.org) 或确认安装了 Typeless 客户端。"
   exit 1
 fi
 
@@ -49,11 +49,11 @@ fi
 
 # 3. 终端交互菜单设计
 options=(
-  "一键迁移 (导出 Typeless 词库并写入 OpenLess)"
-  "仅导出 Typeless 词库 (保存为 txt, csv, json)"
+  "导出 Typeless 词库 (保存为 txt, csv, json)"
+  "一键迁移到 OpenLess (导出并写入 OpenLess 词典)"
   "同步 240+ 程序员与 AI 热词到 OpenLess"
   "导入自定义词表文件到 OpenLess"
-  "安装 t2o 命令到终端 (支持以后直接运行 t2o)"
+  "安装 tle 命令到终端 (支持以后直接运行 tle)"
   "退出"
 )
 
@@ -82,7 +82,7 @@ print_menu() {
 
 echo ""
 echo "=============================================="
-echo "  Typeless to OpenLess - 词库迁移助手"
+echo "  Typeless Export - 词库导出与迁移助手"
 echo "=============================================="
 echo "请使用 ↑ / ↓ 键选择操作，按 Enter 回车确认："
 echo ""
@@ -134,10 +134,10 @@ echo ""
 # 4. 执行选中的指令
 case $selected in
   0)
-    "$JS_RUNNER" "$CLI_PATH" migrate
+    "$JS_RUNNER" "$CLI_PATH" export
     ;;
   1)
-    "$JS_RUNNER" "$CLI_PATH" export
+    "$JS_RUNNER" "$CLI_PATH" migrate
     ;;
   2)
     "$JS_RUNNER" "$CLI_PATH" sync
@@ -161,15 +161,15 @@ case $selected in
       mkdir -p "$INSTALL_BIN_DIR"
     fi
 
-    WRAPPER="$INSTALL_BIN_DIR/t2o"
+    WRAPPER="$INSTALL_BIN_DIR/tle"
     cat << WRAPPER_EOF > "$WRAPPER"
 #!/usr/bin/env bash
 exec bash "$PROJECT_ROOT/run.sh" "\$@"
 WRAPPER_EOF
     chmod +x "$WRAPPER"
 
-    echo "✓ 已成功将 t2o 安装至 $WRAPPER"
-    echo "现在你可以在任意终端窗口直接输入 t2o 打开本菜单！"
+    echo "✓ 已成功将 tle 安装至 $WRAPPER"
+    echo "现在你可以在任意终端窗口直接输入 tle 打开本菜单！"
     ;;
   5)
     echo "已退出。"
