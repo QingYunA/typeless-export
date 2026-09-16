@@ -7,7 +7,7 @@
 
 set -e
 
-VERSION="1.0.5"
+VERSION="1.0.6"
 
 # 1. 确定运行环境与项目根目录
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" 2>/dev/null && pwd || echo "")"

@@ -156,23 +156,23 @@ async function handleSync() {
     const programmerWords = loadVocabFile('programmer.txt');
     console.log(isEn ? `Loaded ${programmerWords.length} technical hotwords` : `已载入 ${programmerWords.length} 个技术词汇`);
 
-    const presetName = isEn ? 'Programmer Terms & AI Hotwords' : '程序员常用词语与 AI 热词';
+    const presetName = isEn ? 'Programmer & AI Hotwords' : '程序员常用热词';
     const res = importToOpenLess(programmerWords, {
       presetName,
-      presetId: 'programmer_ai_terms',
+      presetId: 'programmer_hotwords',
     });
 
     if (isEn) {
       const action = res.presetAction === '新建' ? 'Created' : 'Updated';
       console.log(`Sync completed:`);
-      console.log(`- OpenLess Expansion Pack (vocab-presets.json): ${action} "${res.presetName}" (${res.presetWordsCount} terms)`);
-      console.log(`- Your personal dictionary is untouched. You can toggle this pack on/off in OpenLess settings.`);
-      console.log(`\nNote: Please restart OpenLess to see the new expansion pack.`);
+      console.log(`- OpenLess Preset: ${action} "${res.presetName}" (${res.presetWordsCount} terms)`);
+      console.log(`- Note: Preset is not auto-enabled. You can toggle it on/off in OpenLess settings.`);
+      console.log(`\nTip: Please restart OpenLess to see the updated preset.`);
     } else {
       console.log(`同步完成:`);
-      console.log(`- OpenLess 拓展集 (vocab-presets.json): 已${res.presetAction}「${res.presetName}」(${res.presetWordsCount} 词)`);
-      console.log(`- 个人活跃词库保持独立未受影响，你可以在 OpenLess 偏好设置中自由勾选是否启用。`);
-      console.log(`\n提示: 请退出并重新打开 OpenLess 查看新增拓展集。`);
+      console.log(`- OpenLess 拓展预设: 已${res.presetAction}「${res.presetName}」(${res.presetWordsCount} 词)`);
+      console.log(`- 说明: 该预设未默认启用，你可以在 OpenLess 偏好设置中自由勾选是否启用。`);
+      console.log(`\n提示: 请退出并重新打开 OpenLess 查看新增预设。`);
     }
   } catch (err) {
     console.error(isEn ? `Sync failed: ${err.message}` : `同步失败: ${err.message}`);
@@ -181,42 +181,58 @@ async function handleSync() {
 }
 
 async function handleMigrate() {
-  console.log(isEn ? 'Starting migration from Typeless to OpenLess...' : '开始迁移 Typeless 词库到 OpenLess...');
+  console.log(isEn ? 'Starting migration from Typeless to OpenLess...' : '开始导出并迁移 Typeless 词库到 OpenLess...');
 
   let typelessWords = [];
+  const homeDir = process.env.HOME || process.env.USERPROFILE || os.homedir();
   try {
-    const auth = decryptTypelessAuth();
-    console.log(isEn ? `Found Typeless account: ${auth.email}` : `已识别 Typeless 账号: ${auth.email}`);
-    const words = await fetchTypelessDictionary(auth.userId, auth.token);
-    typelessWords = words.map(w => w.term || w.word).filter(Boolean);
-    console.log(isEn ? `Retrieved ${typelessWords.length} terms from Typeless` : `已拉取 ${typelessWords.length} 个本地词条`);
+    const result = await exportTypelessToFile(homeDir);
+    typelessWords = result.words.map(w => w.term || w.word).filter(Boolean);
+    if (isEn) {
+      console.log(`Found Typeless account: ${result.email}`);
+      console.log(`Exported ${result.words.length} terms to home directory (~):`);
+      console.log(`- Text: ${result.txtPath}`);
+      console.log(`- CSV:  ${result.csvPath}`);
+      console.log(`- JSON: ${result.jsonPath}`);
+    } else {
+      console.log(`已获取凭据: ${result.email}`);
+      console.log(`已导出 ${result.words.length} 个词条至家目录 (~):`);
+      console.log(`- 文本: ${result.txtPath}`);
+      console.log(`- 表格: ${result.csvPath}`);
+      console.log(`- JSON: ${result.jsonPath}`);
+    }
   } catch (err) {
-    console.error(isEn ? `Typeless fetch failed: ${err.message}` : `从 Typeless 获取失败: ${err.message}`);
+    console.error(isEn ? `Typeless export failed: ${err.message}` : `从 Typeless 导出失败: ${err.message}`);
     process.exit(1);
   }
 
-  try {
-    const presetName = isEn ? 'Typeless Migrated Vocabulary' : 'Typeless 迁移词库';
-    const res = importToOpenLess(typelessWords, {
-      presetName,
-      presetId: 'typeless_migrated',
-    });
+  // 1. 预设 1: Typeless 个人词典
+  const typelessPresetName = isEn ? 'Typeless Personal Vocabulary' : 'Typeless 个人词典';
+  const res1 = importToOpenLess(typelessWords, {
+    presetName: typelessPresetName,
+    presetId: 'typeless_personal',
+  });
 
-    if (isEn) {
-      const action = res.presetAction === '新建' ? 'Created' : 'Updated';
-      console.log(`Migration completed:`);
-      console.log(`- OpenLess Expansion Pack (vocab-presets.json): ${action} "${res.presetName}" (${res.presetWordsCount} terms)`);
-      console.log(`- Your personal dictionary is untouched. You can toggle this pack on/off in OpenLess settings.`);
-      console.log(`\nNote: Please restart OpenLess to see the new expansion pack.`);
-    } else {
-      console.log(`迁移完成:`);
-      console.log(`- OpenLess 拓展集 (vocab-presets.json): 已${res.presetAction}「${res.presetName}」(${res.presetWordsCount} 词)`);
-      console.log(`- 个人活跃词库保持独立未受影响，你可以在 OpenLess 偏好设置中自由勾选是否启用。`);
-      console.log(`\n提示: 请退出并重新打开 OpenLess 查看新增拓展集。`);
-    }
-  } catch (err) {
-    console.error(isEn ? `Write to OpenLess failed: ${err.message}` : `写入 OpenLess 失败: ${err.message}`);
-    process.exit(1);
+  // 2. 预设 2: 程序员常用热词
+  const programmerWords = loadVocabFile('programmer.txt');
+  const programmerPresetName = isEn ? 'Programmer & AI Hotwords' : '程序员常用热词';
+  const res2 = importToOpenLess(programmerWords, {
+    presetName: programmerPresetName,
+    presetId: 'programmer_hotwords',
+  });
+
+  if (isEn) {
+    console.log(`\nMigration completed! Added 2 expansion presets to OpenLess:`);
+    console.log(`- Preset 1: "${typelessPresetName}" (${res1.presetWordsCount} terms)`);
+    console.log(`- Preset 2: "${programmerPresetName}" (${res2.presetWordsCount} terms)`);
+    console.log(`- Note: Neither preset is auto-enabled. You can toggle them on/off in OpenLess settings.`);
+    console.log(`\nTip: Please restart OpenLess to see the new presets.`);
+  } else {
+    console.log(`\n迁移完成！已为 OpenLess 新增 2 个独立拓展预设：`);
+    console.log(`- 预设 1:「${typelessPresetName}」(${res1.presetWordsCount} 词)`);
+    console.log(`- 预设 2:「${programmerPresetName}」(${res2.presetWordsCount} 词)`);
+    console.log(`- 说明: 两个预设均未默认启用，保持独立，你可以在 OpenLess 偏好设置中自由选择是否启用。`);
+    console.log(`\n提示: 请退出并重新打开 OpenLess 查看新增预设。`);
   }
 }
 

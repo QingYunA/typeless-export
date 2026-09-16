@@ -8,7 +8,7 @@
 set -e
 export TLE_LANG=en
 
-VERSION="1.0.5"
+VERSION="1.0.6"
 
 # 1. Determine execution directory and project root
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" 2>/dev/null && pwd || echo "")"
