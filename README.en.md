@@ -50,13 +50,13 @@ This tool automatically reads and decrypts your local Typeless credentials, expo
 Run directly in your terminal:
 
 ```bash
-bash -c "$(curl -fsSL https://cdn.jsdelivr.net/gh/QingYunA/typeless-export@main/run.en.sh)"
+curl -fsSL https://cdn.jsdelivr.net/gh/QingYunA/typeless-export@main/run.en.sh | bash
 ```
 
 Or via GitHub raw:
 
 ```bash
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/QingYunA/typeless-export/main/run.en.sh)"
+curl -fsSL https://raw.githubusercontent.com/QingYunA/typeless-export/main/run.en.sh | bash
 ```
 
 - **Interactive Arrow Keys**: Use `↑` / `↓` (or `k` / `j`) to navigate, press `Enter` to confirm.

@@ -49,13 +49,13 @@ Typeless 最近把免费额度从每周 8000 字降到了 2000 字。很多用�
 在终端粘贴以下命令即可运行（免科学上网、走 CDN 极速直连）：
 
 ```bash
-bash -c "$(curl -fsSL https://cdn.jsdelivr.net/gh/QingYunA/typeless-export@main/run.sh)"
+curl -fsSL https://cdn.jsdelivr.net/gh/QingYunA/typeless-export@main/run.sh | bash
 ```
 
 或者通过 GitHub 原生地址：
 
 ```bash
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/QingYunA/typeless-export/main/run.sh)"
+curl -fsSL https://raw.githubusercontent.com/QingYunA/typeless-export/main/run.sh | bash
 ```
 
 - **三大核心功能**：
