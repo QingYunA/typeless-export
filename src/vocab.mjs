@@ -21,7 +21,11 @@ export function parseWordList(content) {
 export function loadVocabFile(fileName) {
   const filePath = path.isAbsolute(fileName) ? fileName : path.join(VOCAB_DIR, fileName);
   if (!fs.existsSync(filePath)) {
-    throw new Error(`找不到词库文件: ${filePath}`);
+    throw new Error(
+      process.env.TLE_LANG === 'en'
+        ? `Vocabulary file not found: ${filePath}`
+        : `找不到词库文件: ${filePath}`
+    );
   }
   const content = fs.readFileSync(filePath, 'utf8');
   return parseWordList(content);

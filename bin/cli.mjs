@@ -16,10 +16,16 @@ import {
   parseWordList,
   dedupeWords,
 } from '../src/vocab.mjs';
+import {
+  detectIsEnglish,
+} from '../src/i18n.mjs';
 
 const rawArgs = process.argv.slice(2);
-const isEn = process.env.TLE_LANG === 'en' || rawArgs.includes('--en') || rawArgs.includes('--lang=en');
-const args = rawArgs.filter(a => a !== '--en' && a !== '--lang=en');
+const isEn = detectIsEnglish(rawArgs, process.env);
+process.env.TLE_LANG = isEn ? 'en' : 'zh';
+
+const LANG_FLAGS = ['--en', '--lang=en', '--zh', '--lang=zh'];
+const args = rawArgs.filter(a => !LANG_FLAGS.includes(a));
 const command = args[0] || 'help';
 
 function showHelp() {
@@ -40,6 +46,7 @@ Commands:
 
 Options:
   --en, --lang=en    Display output in English
+  --zh, --lang=zh    Display output in Chinese
   --preset <name>    Specify scene preset name (for import)
 
 Examples:
@@ -64,6 +71,7 @@ Typeless Export (tle) - 词库导出与迁移工具
   help, -h           查看帮助
 
 选项:
+  --zh, --lang=zh    以中文输出
   --en, --lang=en    以英文输出
   --preset <name>    指定预设分类名称 (用于 import)
 

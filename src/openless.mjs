@@ -36,7 +36,11 @@ export function importToOpenLess(words, options = {}) {
 
   const appDir = getOpenLessDir();
   if (!fs.existsSync(appDir)) {
-    throw new Error(`未找到 OpenLess 数据目录 (${appDir})，请先下载并运行一次 OpenLess。`);
+    throw new Error(
+      process.env.TLE_LANG === 'en'
+        ? `OpenLess data directory not found (${appDir}). Please download and launch OpenLess at least once.`
+        : `未找到 OpenLess 数据目录 (${appDir})，请先下载并运行一次 OpenLess。`
+    );
   }
 
   const presetPath = path.join(appDir, 'vocab-presets.json');

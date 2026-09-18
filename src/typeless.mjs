@@ -47,7 +47,11 @@ export function getTypelessUserDataPath() {
 export function decryptTypelessAuth() {
   const userdataPath = getTypelessUserDataPath();
   if (!fs.existsSync(userdataPath)) {
-    throw new Error(`未找到 Typeless 用户数据文件 (${userdataPath})，请确认已安装并登录过 Typeless。`);
+    throw new Error(
+      process.env.TLE_LANG === 'en'
+        ? `Typeless user data not found (${userdataPath}). Please make sure Typeless is installed and logged in.`
+        : `未找到 Typeless 用户数据文件 (${userdataPath})，请确认已安装并登录过 Typeless。`
+    );
   }
 
   const platform = os.platform();
@@ -115,12 +119,20 @@ export async function fetchTypelessDictionary(userId, token) {
   });
 
   if (!response.ok) {
-    throw new Error(`Typeless API 请求失败: ${response.status} ${response.statusText}`);
+    throw new Error(
+      process.env.TLE_LANG === 'en'
+        ? `Typeless API request failed: ${response.status} ${response.statusText}`
+        : `Typeless API 请求失败: ${response.status} ${response.statusText}`
+    );
   }
 
   const result = await response.json();
   if (result.status !== 'OK' && result.code !== 200) {
-    throw new Error(`Typeless API 返回错误: ${result.message || result.msg || JSON.stringify(result)}`);
+    throw new Error(
+      process.env.TLE_LANG === 'en'
+        ? `Typeless API error: ${result.message || result.msg || JSON.stringify(result)}`
+        : `Typeless API 返回错误: ${result.message || result.msg || JSON.stringify(result)}`
+    );
   }
 
   return result.data?.words || [];

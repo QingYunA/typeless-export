@@ -16,3 +16,7 @@ export {
   parseWordList,
   dedupeWords,
 } from './vocab.mjs';
+
+export {
+  detectIsEnglish,
+} from './i18n.mjs';
