@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
 import crypto from 'node:crypto';
+import { i18n } from './i18n.mjs';
 
 // 兼容 CryptoJS 的 AES 秘钥派生 (EVP_BytesToKey)
 function evpBytesToKey(passphrase, salt, keyLen, ivLen) {
@@ -48,9 +49,10 @@ export function decryptTypelessAuth() {
   const userdataPath = getTypelessUserDataPath();
   if (!fs.existsSync(userdataPath)) {
     throw new Error(
-      process.env.TLE_LANG === 'en'
-        ? `Typeless user data not found (${userdataPath}). Please make sure Typeless is installed and logged in.`
-        : `未找到 Typeless 用户数据文件 (${userdataPath})，请确认已安装并登录过 Typeless。`
+      i18n(
+        `Typeless user data not found (${userdataPath}). Please make sure Typeless is installed and logged in.`,
+        `未找到 Typeless 用户数据文件 (${userdataPath})，请确认已安装并登录过 Typeless。`
+      )
     );
   }
 
@@ -120,18 +122,20 @@ export async function fetchTypelessDictionary(userId, token) {
 
   if (!response.ok) {
     throw new Error(
-      process.env.TLE_LANG === 'en'
-        ? `Typeless API request failed: ${response.status} ${response.statusText}`
-        : `Typeless API 请求失败: ${response.status} ${response.statusText}`
+      i18n(
+        `Typeless API request failed: ${response.status} ${response.statusText}`,
+        `Typeless API 请求失败: ${response.status} ${response.statusText}`
+      )
     );
   }
 
   const result = await response.json();
   if (result.status !== 'OK' && result.code !== 200) {
     throw new Error(
-      process.env.TLE_LANG === 'en'
-        ? `Typeless API error: ${result.message || result.msg || JSON.stringify(result)}`
-        : `Typeless API 返回错误: ${result.message || result.msg || JSON.stringify(result)}`
+      i18n(
+        `Typeless API error: ${result.message || result.msg || JSON.stringify(result)}`,
+        `Typeless API 返回错误: ${result.message || result.msg || JSON.stringify(result)}`
+      )
     );
   }
 

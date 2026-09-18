@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
 import crypto from 'node:crypto';
+import { i18n } from './i18n.mjs';
 
 export function getOpenLessDir() {
   const platform = os.platform();
@@ -37,9 +38,10 @@ export function importToOpenLess(words, options = {}) {
   const appDir = getOpenLessDir();
   if (!fs.existsSync(appDir)) {
     throw new Error(
-      process.env.TLE_LANG === 'en'
-        ? `OpenLess data directory not found (${appDir}). Please download and launch OpenLess at least once.`
-        : `未找到 OpenLess 数据目录 (${appDir})，请先下载并运行一次 OpenLess。`
+      i18n(
+        `OpenLess data directory not found (${appDir}). Please download and launch OpenLess at least once.`,
+        `未找到 OpenLess 数据目录 (${appDir})，请先下载并运行一次 OpenLess。`
+      )
     );
   }
 

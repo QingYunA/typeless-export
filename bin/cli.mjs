@@ -24,8 +24,18 @@ const rawArgs = process.argv.slice(2);
 const isEn = detectIsEnglish(rawArgs, process.env);
 process.env.TLE_LANG = isEn ? 'en' : 'zh';
 
-const LANG_FLAGS = ['--en', '--lang=en', '--zh', '--lang=zh'];
-const args = rawArgs.filter(a => !LANG_FLAGS.includes(a));
+const args = [];
+for (let i = 0; i < rawArgs.length; i++) {
+  const a = rawArgs[i];
+  if (a === '--en' || a === '--lang=en' || a === '--zh' || a === '--lang=zh') {
+    continue;
+  }
+  if (a === '--lang' && rawArgs[i + 1]) {
+    i++;
+    continue;
+  }
+  args.push(a);
+}
 const command = args[0] || 'help';
 
 function showHelp() {

@@ -21,10 +21,18 @@ VERSION="1.0.6"
 # ------------------------------------------------------------------------------
 detect_language() {
   # 1. 命令行参数优先
-  for arg in "$@"; do
-    case "$arg" in
+  local args_copy=("$@")
+  for ((i=0; i<${#args_copy[@]}; i++)); do
+    case "${args_copy[i]}" in
       --en|--lang=en) echo "en"; return ;;
       --zh|--lang=zh) echo "zh"; return ;;
+      --lang)
+        local next_val="${args_copy[i+1]:-}"
+        case "$next_val" in
+          zh*|ZH*) echo "zh"; return ;;
+          *)       echo "en"; return ;;
+        esac
+        ;;
     esac
   done
 
@@ -49,9 +57,13 @@ detect_language() {
     mac_locale="$(defaults read -g AppleLocale 2>/dev/null || true)"
     case "$mac_locale" in
       zh*) echo "zh"; return ;;
+      en*) echo "en"; return ;;
     esac
 
-    if defaults read -g AppleLanguages 2>/dev/null | head -n 3 | grep -qi "zh"; then
+    # 仅检测首选语言 (AppleLanguages 数组第 2 行的第一项首选项，避免次选语言误命中)
+    local primary_lang
+    primary_lang="$(defaults read -g AppleLanguages 2>/dev/null | sed -n '2p' || true)"
+    if echo "$primary_lang" | grep -qi "zh"; then
       echo "zh"
       return
     fi
@@ -139,10 +151,22 @@ CLI_PATH="$PROJECT_ROOT/bin/cli.mjs"
 
 # 如果传递了子命令参数 (如 ./run.sh export)，直接静默执行，不打开菜单
 cmd_args=()
-for arg in "$@"; do
+skip_next=0
+for ((i=1; i<=$#; i++)); do
+  if [ "$skip_next" -eq 1 ]; then
+    skip_next=0
+    continue
+  fi
+  arg="${!i}"
   case "$arg" in
-    --en|--lang=en|--zh|--lang=zh) ;;
-    *) cmd_args+=("$arg") ;;
+    --en|--lang=en|--zh|--lang=zh)
+      ;;
+    --lang)
+      skip_next=1
+      ;;
+    *)
+      cmd_args+=("$arg")
+      ;;
   esac
 done
 

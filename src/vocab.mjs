@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { i18n } from './i18n.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export const VOCAB_DIR = path.resolve(__dirname, '../vocabularies');
@@ -22,9 +23,10 @@ export function loadVocabFile(fileName) {
   const filePath = path.isAbsolute(fileName) ? fileName : path.join(VOCAB_DIR, fileName);
   if (!fs.existsSync(filePath)) {
     throw new Error(
-      process.env.TLE_LANG === 'en'
-        ? `Vocabulary file not found: ${filePath}`
-        : `找不到词库文件: ${filePath}`
+      i18n(
+        `Vocabulary file not found: ${filePath}`,
+        `找不到词库文件: ${filePath}`
+      )
     );
   }
   const content = fs.readFileSync(filePath, 'utf8');
