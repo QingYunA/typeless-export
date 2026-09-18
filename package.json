@@ -12,7 +12,8 @@
     "export": "node ./bin/cli.mjs export",
     "import": "node ./bin/cli.mjs import",
     "sync": "node ./bin/cli.mjs sync",
-    "migrate": "node ./bin/cli.mjs migrate"
+    "migrate": "node ./bin/cli.mjs migrate",
+    "test": "node --test"
   },
   "keywords": [
     "typeless",

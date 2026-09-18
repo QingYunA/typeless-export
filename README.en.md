@@ -45,17 +45,19 @@ This tool automatically reads and decrypts your local Typeless credentials, expo
 
 ### Method 1: Interactive Menu (Recommended)
 
-Run directly in your terminal:
+Run directly in your terminal (auto-detects English/Chinese from your environment):
 
 ```bash
-curl -fsSL https://cdn.jsdelivr.net/gh/QingYunA/typeless-export@main/run.en.sh | bash
+curl -fsSL https://cdn.jsdelivr.net/gh/QingYunA/typeless-export@main/run.sh | bash
 ```
 
 Or via GitHub raw:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/QingYunA/typeless-export/main/run.en.sh | bash
+curl -fsSL https://raw.githubusercontent.com/QingYunA/typeless-export/main/run.sh | bash
 ```
+
+> **Tip**: Language is automatically detected based on your system locale. You can also override it using `TLE_LANG=en` or `TLE_LANG=zh`.
 
 - **Interactive Arrow Keys**: Use `↑` / `↓` (or `k` / `j`) to navigate, press `Enter` to confirm.
 - **Three Core Features**:

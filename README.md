@@ -44,7 +44,7 @@ Typeless 最近把免费额度从每周 8000 字降到了 2000 字。很多用�
 
 ### 方式一：一行命令直接运行（推荐，带交互菜单）
 
-在终端粘贴以下命令即可运行（免科学上网、走 CDN 极速直连）：
+在终端粘贴以下命令即可运行（自动识别系统语言、免科学上网、走 CDN 极速直连）：
 
 ```bash
 curl -fsSL https://cdn.jsdelivr.net/gh/QingYunA/typeless-export@main/run.sh | bash
@@ -55,6 +55,8 @@ curl -fsSL https://cdn.jsdelivr.net/gh/QingYunA/typeless-export@main/run.sh | ba
 ```bash
 curl -fsSL https://raw.githubusercontent.com/QingYunA/typeless-export/main/run.sh | bash
 ```
+
+> **提示**：脚本会自动识别系统语言环境（中文显示中文，海外英文环境自动显示英文）。也可以通过 `TLE_LANG=en` 或 `TLE_LANG=zh` 强制切换。
 
 - **三大核心功能**：
   1. `导出 Typeless 词库`：输入保存目录（默认直接保存至 `~` 家目录），生成 txt、csv、json。
